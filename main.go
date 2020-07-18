@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"kafka-config-metrics/util"
 	"regexp"
 	"sync"
+
+	"github.com/EladLeev/kafka-config-metrics/util"
 )
 
 func filterTopic(filterRegex string) *regexp.Regexp {
