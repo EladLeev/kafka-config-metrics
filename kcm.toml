@@ -1,0 +1,26 @@
+# Sample Config File
+
+[global]
+port = 9000
+
+[log]
+path = "/var/log/kcm.log"
+level = "info"
+
+[kafka]
+default_refresh_rate = 60
+# Default: 0.11.0.0
+# As the `describeConfigs` operation is supported by brokers with version 0.11.0.0 or higher:
+# https://kafka.apache.org/23/javadoc/index.html?org/apache/kafka/clients/admin/AdminClient.html
+min_kafka_version = "0.11.0.0"
+admin_timeout = 30
+
+[clusters]
+
+  # Which clusters should I listen to?
+  [clusters.prod]
+  brokers = ["kafka01-prod"]
+
+  [clusters.test]
+  brokers = ["kafka02-prod", "kafka03-prod"]
+  topicfilter="^(qa-|test-).*$"
