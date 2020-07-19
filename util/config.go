@@ -13,8 +13,8 @@ type TomlConfig struct {
 		Port int `toml:"port"`
 	} `toml:"global"`
 	Log struct {
-		Path  string `toml:"path"`
-		Level string `toml:"level"`
+		Format string `toml:"format"`
+		Level  string `toml:"level"`
 	} `toml:"log"`
 	Kafka struct {
 		DefaultRefreshRate int    `toml:"default_refresh_rate"`
