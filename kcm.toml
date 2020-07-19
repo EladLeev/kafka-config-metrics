@@ -4,8 +4,8 @@
 port = 9000
 
 [log]
-path = "/var/log/kcm.log"
 level = "info"
+#format = "json"
 
 [kafka]
 default_refresh_rate = 60

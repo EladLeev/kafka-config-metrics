@@ -1,10 +1,8 @@
 package util
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/BurntSushi/toml"
+	log "github.com/sirupsen/logrus"
 )
 
 // TomlConfig is the main config struct
@@ -13,8 +11,8 @@ type TomlConfig struct {
 		Port int `toml:"port"`
 	} `toml:"global"`
 	Log struct {
-		Path  string `toml:"path"`
-		Level string `toml:"level"`
+		Format string `toml:"format"`
+		Level  string `toml:"level"`
 	} `toml:"log"`
 	Kafka struct {
 		DefaultRefreshRate int    `toml:"default_refresh_rate"`
@@ -33,8 +31,7 @@ type clusters struct {
 func InitConfig() TomlConfig {
 	var config TomlConfig
 	if _, err := toml.DecodeFile("/opt/kcm/kcm.toml", &config); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Panicf("Unble to load config file.\n%v", err)
 	}
 	return config
 }

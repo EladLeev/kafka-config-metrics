@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/EladLeev/kafka-config-metrics/util"
+	log "github.com/sirupsen/logrus"
 )
 
 func filterTopic(filterRegex string) *regexp.Regexp {
@@ -19,6 +20,7 @@ func filterTopic(filterRegex string) *regexp.Regexp {
 func pullConfigs(cfg util.TomlConfig, clusterName string) {
 	clusterBrokers := cfg.Clusters[clusterName].Brokers
 	clusterAdmin := util.OpenConnection(cfg.Kafka.MinKafkaVersion, clusterBrokers)
+	log.Debugf("KafkaVersion: %v | BrokerList: %v", cfg.Kafka.MinKafkaVersion, clusterBrokers)
 	defer clusterAdmin.Close()
 
 	// Pull topic list and topic configs
@@ -41,12 +43,15 @@ func pullConfigs(cfg util.TomlConfig, clusterName string) {
 }
 
 func main() {
-	// Load config file
+	// Init config and logger
 	cfg := util.InitConfig()
+	util.InitLog(cfg)
+	log.Infof(" \\ʕ ◔ ϖ ◔ ʔ/ ## Kafka-Config-Metrics-Exporter ## \\ʕ ◔ ϖ ◔ ʔ/\n")
+	log.Debugf("cfg: %+v", cfg)
 
 	// Pull from each cluster
 	for cluster := range cfg.Clusters {
 		pullConfigs(cfg, cluster)
 	}
-	fmt.Print("done")
+	log.Info("done")
 }

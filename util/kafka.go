@@ -2,17 +2,17 @@ package util
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 	"sync"
 
 	"github.com/Shopify/sarama"
+	log "github.com/sirupsen/logrus"
 )
 
 func parseKafkaVersion(kafkaVersion string) sarama.KafkaVersion {
 	version, err := sarama.ParseKafkaVersion(kafkaVersion)
 	if err != nil {
-		panic(err)
+		log.Panicf("Unknown Kafka Version:\n%v", err)
 	}
 	return version
 }
@@ -26,8 +26,7 @@ func OpenConnection(kafkaVersion string, clusterAddr []string) sarama.ClusterAdm
 
 	clusterAdmin, err := sarama.NewClusterAdmin(clusterAddr, config)
 	if err != nil {
-		fmt.Print(err)
-		os.Exit(1)
+		log.Errorf("Unable to connect to cluster.\n%v", err)
 	}
 	return clusterAdmin
 }
@@ -42,7 +41,7 @@ func DescribeTopicConfig(topicName string, clusterAdmin sarama.ClusterAdmin, wg 
 
 	r, err := clusterAdmin.DescribeConfig(resource)
 	if err != nil {
-		fmt.Printf("error:%v", err)
+		log.Errorf("Unable to DescribeConfig:\n%v", err)
 		return
 	}
 	fmt.Printf("> Topic: %v\n\n", topicName)
@@ -59,7 +58,7 @@ func ListTopics(clusterAdmin sarama.ClusterAdmin) map[string]sarama.TopicDetail 
 	r, err := clusterAdmin.ListTopics()
 	if err != nil {
 		//TODO
-		panic(err)
+		log.Errorf("Unable to ListTopics:\n%v", err)
 	}
 	return r
 }
