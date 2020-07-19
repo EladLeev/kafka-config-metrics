@@ -20,6 +20,7 @@ func filterTopic(filterRegex string) *regexp.Regexp {
 func pullConfigs(cfg util.TomlConfig, clusterName string) {
 	clusterBrokers := cfg.Clusters[clusterName].Brokers
 	clusterAdmin := util.OpenConnection(cfg.Kafka.MinKafkaVersion, clusterBrokers)
+	log.Debugf("KafkaVersion: %v | BrokerList: %v", cfg.Kafka.MinKafkaVersion, clusterBrokers)
 	defer clusterAdmin.Close()
 
 	// Pull topic list and topic configs
@@ -46,6 +47,7 @@ func main() {
 	cfg := util.InitConfig()
 	util.InitLog(cfg)
 	log.Infof(" \\ʕ ◔ ϖ ◔ ʔ/ ## Kafka-Config-Metrics-Exporter ## \\ʕ ◔ ϖ ◔ ʔ/\n")
+	log.Debugf("cfg: %+v", cfg)
 
 	// Pull from each cluster
 	for cluster := range cfg.Clusters {

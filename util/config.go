@@ -1,10 +1,8 @@
 package util
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/BurntSushi/toml"
+	log "github.com/sirupsen/logrus"
 )
 
 // TomlConfig is the main config struct
@@ -33,8 +31,7 @@ type clusters struct {
 func InitConfig() TomlConfig {
 	var config TomlConfig
 	if _, err := toml.DecodeFile("/opt/kcm/kcm.toml", &config); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Panicf("Unble to load config file.\n%v", err)
 	}
 	return config
 }
