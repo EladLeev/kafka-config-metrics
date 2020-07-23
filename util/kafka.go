@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/Shopify/sarama"
 	log "github.com/sirupsen/logrus"
@@ -18,11 +19,10 @@ func parseKafkaVersion(kafkaVersion string) sarama.KafkaVersion {
 }
 
 // OpenConnection to one of a given broker using supplied version
-func OpenConnection(kafkaVersion string, clusterAddr []string) sarama.ClusterAdmin {
+func OpenConnection(kafkaVersion string, clusterAddr []string, adminTimeout int) sarama.ClusterAdmin {
 	config := sarama.NewConfig()
-	//TODO: Make sure min version
 	config.Version = parseKafkaVersion(kafkaVersion)
-	//config.Admin.Timeout = time.Duration(cfg.Kafka.AdminTimeout) # TODO
+	config.Admin.Timeout = time.Duration(adminTimeout)
 
 	clusterAdmin, err := sarama.NewClusterAdmin(clusterAddr, config)
 	if err != nil {
