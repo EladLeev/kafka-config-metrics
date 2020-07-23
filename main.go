@@ -19,7 +19,7 @@ func filterTopic(filterRegex string) *regexp.Regexp {
 
 func pullConfigs(cfg util.TomlConfig, clusterName string) {
 	clusterBrokers := cfg.Clusters[clusterName].Brokers
-	clusterAdmin := util.OpenConnection(cfg.Kafka.MinKafkaVersion, clusterBrokers)
+	clusterAdmin := util.OpenConnection(cfg.Kafka.MinKafkaVersion, clusterBrokers, cfg.Kafka.AdminTimeout)
 	log.Debugf("KafkaVersion: %v | BrokerList: %v", cfg.Kafka.MinKafkaVersion, clusterBrokers)
 	defer clusterAdmin.Close()
 

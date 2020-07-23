@@ -33,5 +33,9 @@ func InitConfig() TomlConfig {
 	if _, err := toml.DecodeFile("/opt/kcm/kcm.toml", &config); err != nil {
 		log.Panicf("Unble to load config file.\n%v", err)
 	}
+	// Set custom defaults
+	if config.Kafka.AdminTimeout == 0 {
+		config.Kafka.AdminTimeout = 5
+	}
 	return config
 }
