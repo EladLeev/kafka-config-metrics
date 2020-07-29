@@ -1,8 +1,6 @@
 package util
 
 import (
-	"fmt"
-	"strconv"
 	"sync"
 	"time"
 
@@ -44,13 +42,16 @@ func DescribeTopicConfig(topicName string, clusterAdmin sarama.ClusterAdmin, wg 
 		log.Errorf("Unable to DescribeConfig:\n%v", err)
 		return
 	}
-	fmt.Printf("> Topic: %v\n\n", topicName)
-	for _, v := range r {
-		if s, err := strconv.Atoi(v.Value); err == nil {
-			fmt.Printf("%v: %v \n", v.Name, s)
-		}
-	}
-	fmt.Printf("\n###############################################################\n")
+
+	RegisterMetrics(r, topicName)
+	return
+	// fmt.Printf("> Topic: %v\n\n", topicName)
+	// for _, v := range r {
+	// 	if s, err := strconv.Atoi(v.Value); err == nil {
+	// 		fmt.Printf("%v: %v \n", v.Name, s)
+	// 	}
+	// }
+	// fmt.Printf("\n###############################################################\n")
 }
 
 // ListTopics on a given cluster

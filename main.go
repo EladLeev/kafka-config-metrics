@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"regexp"
 	"sync"
 
 	"github.com/EladLeev/kafka-config-metrics/util"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -49,9 +51,16 @@ func main() {
 	log.Infof(" \\ʕ ◔ ϖ ◔ ʔ/ ## Kafka-Config-Metrics-Exporter ## \\ʕ ◔ ϖ ◔ ʔ/\n")
 	log.Debugf("cfg: %+v", cfg)
 
+	// Init Prometheus metrics
+	util.InitProm()
+
 	// Pull from each cluster
 	for cluster := range cfg.Clusters {
 		pullConfigs(cfg, cluster)
 	}
 	log.Info("done")
+
+	// Exspose Prometheus endpoint
+	http.Handle("/metrics", promhttp.Handler())
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
