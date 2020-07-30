@@ -2,11 +2,13 @@ package util
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"sync"
 	"time"
 
 	"github.com/Shopify/sarama"
+	"github.com/prometheus/client_golang/prometheus"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -31,8 +33,8 @@ func OpenConnection(kafkaVersion string, clusterAddr []string, adminTimeout int)
 	return clusterAdmin
 }
 
-// DescribeTopicConfig Gets topicName and ClusterAdmin interface and return []ConfigEntry
-func DescribeTopicConfig(topicName string, clusterAdmin sarama.ClusterAdmin, wg *sync.WaitGroup) {
+// describeTopicConfig Gets topicName and ClusterAdmin interface and return []ConfigEntry
+func describeTopicConfig(topicName string, clusterAdmin sarama.ClusterAdmin, wg *sync.WaitGroup, collector *Collector) {
 	defer wg.Done()
 	resource := sarama.ConfigResource{
 		Type: sarama.TopicResource,
@@ -44,21 +46,57 @@ func DescribeTopicConfig(topicName string, clusterAdmin sarama.ClusterAdmin, wg 
 		log.Errorf("Unable to DescribeConfig:\n%v", err)
 		return
 	}
-	fmt.Printf("> Topic: %v\n\n", topicName)
+	RegisterMetrics(r, topicName, collector)
+	//log.Debug(r)
 	for _, v := range r {
 		if s, err := strconv.Atoi(v.Value); err == nil {
-			fmt.Printf("%v: %v \n", v.Name, s)
+			// Register metrics
+			collector.minCompactionLagMs.With(prometheus.Labels{"topic": topicName}).Set(float64(s))
 		}
 	}
-	fmt.Printf("\n###############################################################\n")
+	return
 }
 
-// ListTopics on a given cluster
-func ListTopics(clusterAdmin sarama.ClusterAdmin) map[string]sarama.TopicDetail {
+// listTopics on a given cluster
+func listTopics(clusterAdmin sarama.ClusterAdmin) map[string]sarama.TopicDetail {
 	r, err := clusterAdmin.ListTopics()
 	if err != nil {
 		//TODO
 		log.Errorf("Unable to ListTopics:\n%v", err)
 	}
 	return r
+}
+
+func filterTopic(filterRegex string) *regexp.Regexp {
+	re, err := regexp.Compile(filterRegex)
+	if err != nil {
+		fmt.Print(err)
+	}
+	return re
+}
+
+// PullConfigs opens a connection to a given cluster, filter topics based on the config file
+// and then run DescribeTopicConfig to populate the metrics
+func PullConfigs(cfg TomlConfig, clusterName string, collector *Collector) {
+	clusterBrokers := cfg.Clusters[clusterName].Brokers
+	clusterAdmin := OpenConnection(cfg.Kafka.MinKafkaVersion, clusterBrokers, cfg.Kafka.AdminTimeout)
+	log.Debugf("KafkaVersion: %v | BrokerList: %v", cfg.Kafka.MinKafkaVersion, clusterBrokers)
+	defer clusterAdmin.Close()
+
+	// Pull topic list and topic configs
+	var wg sync.WaitGroup
+	var re *regexp.Regexp
+	topicList := listTopics(clusterAdmin)
+	// If `topicfilter` config is not empty, compile Regex
+	if cfg.Clusters[clusterName].TopicFilter != "" {
+		re = filterTopic(cfg.Clusters[clusterName].TopicFilter)
+	}
+	for topic := range topicList {
+		if (re != nil) && re.MatchString(topic) {
+			continue
+		}
+		wg.Add(1)
+		go describeTopicConfig(topic, clusterAdmin, &wg, collector)
+	}
+	wg.Wait()
 }
