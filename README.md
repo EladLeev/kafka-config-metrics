@@ -91,6 +91,16 @@ This struct defining the clusters to pull the config from.
 `topicfilter` allows you to filter topics based on a Regex.<br>
 e.g - `"^(qa-|test-).*$"` - Filter all topics that are starting with `qa` or `test`.
 
+### Prometheus Configuration
+When setting this exporter in the Prometheus targets, bare in mind that topic configs are not subject to change that often in most use cases.<br>
+Setting a higher `scrape_interval`, let's say to 10 minuts, will lead to lower requests rate to the Kafka cluster while still keeping the exporter functional.
+```
+  - job_name: 'kcm'
+    scrape_interval: 600s
+    static_configs:
+    - targets: ['kcm-prod:8080']
+```
+
 ## Dashboard Example
 wip
 
