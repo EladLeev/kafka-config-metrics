@@ -199,9 +199,8 @@ func (c *Collector) Collect(ch chan<- prometheus.Metric) {
 					That is, all scrapes should be synchronous."
 		https://prometheus.io/docs/instrumenting/writing_exporters/#scheduling
 	*/
-	cfg := InitConfig()
-	for cluster := range cfg.Clusters {
-		PullConfigs(cfg, cluster, c)
+	for cluster := range Configuration.Clusters {
+		PullConfigs(Configuration, cluster, c)
 	}
 
 	// Collect

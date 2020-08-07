@@ -5,6 +5,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var (
+	// Configuration is main conig
+	Configuration TomlConfig
+)
+
 // TomlConfig is the main config struct
 type TomlConfig struct {
 	Global struct {
@@ -27,8 +32,13 @@ type clusters struct {
 	TopicFilter string
 }
 
-// InitConfig load the config from path, parse it and return TomlConfig
-func InitConfig() TomlConfig {
+func init() {
+	Configuration = initConfig()
+}
+
+// initConfig load the config from path, parse it and return TomlConfig
+func initConfig() TomlConfig {
+	log.Debug("Config init")
 	var config TomlConfig
 	if _, err := toml.DecodeFile("/opt/kcm/kcm.toml", &config); err != nil {
 		log.Panicf("Unble to load config file.\n%v", err)

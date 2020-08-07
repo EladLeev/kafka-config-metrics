@@ -10,10 +10,9 @@ import (
 
 func main() {
 	// Init config and logger
-	cfg := util.InitConfig()
-	util.InitLog(cfg)
+	util.InitLog(util.Configuration)
 	log.Infof(" \\ʕ ◔ ϖ ◔ ʔ/ ## Kafka-Config-Metrics-Exporter ## \\ʕ ◔ ϖ ◔ ʔ/\n")
-	log.Debugf("cfg: %+v", cfg)
+	log.Debugf("cfg: %+v", util.Configuration)
 
 	// Init Prometheus metrics
 	util.InitProm()
