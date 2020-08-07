@@ -32,13 +32,25 @@ _Use topic filtering as needed._
 
 4. Deploy the binary and run the exporter
 ```
-./kcm-exporter --config <PATH>
+cp ~/my_kcm.toml /opt/kcm/kcm.toml
+./kcm-exporter
 ```
 The exporter will use `/opt/kcm/kcm.toml` as default.
 
 ## Using Docker Image
+1. Clone this repository
 ```
+git clone https://github.com/EladLeev/kafka-config-metrics
+cd kafka-config-metrics
 ``` 
+2. Build the Docker image
+```
+docker build . -t kcm-exporter
+```
+3. Run it with your custom configuration file
+```
+docker run -p 9090:9090 -v ~/my_kcm.toml:/opt/kcm/kcm.toml kcm-exporter:latest
+```
 
 ## Configuration
 This project tried to stand in the Prometheus community [best practices](https://prometheus.io/docs/instrumenting/writing_exporters/) -<br>
