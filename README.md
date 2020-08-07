@@ -102,7 +102,7 @@ Setting a higher `scrape_interval`, let's say to 10 minuts, will lead to lower r
 ```
 
 ## Dashboard Example
-wip
+![Dashboard Sample](doc/dashboard.png)
 
 ## Contributing
 
