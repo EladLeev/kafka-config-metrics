@@ -3,12 +3,10 @@ package util
 import (
 	"fmt"
 	"regexp"
-	"strconv"
 	"sync"
 	"time"
 
 	"github.com/Shopify/sarama"
-	"github.com/prometheus/client_golang/prometheus"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -28,7 +26,7 @@ func OpenConnection(kafkaVersion string, clusterAddr []string, adminTimeout int)
 
 	clusterAdmin, err := sarama.NewClusterAdmin(clusterAddr, config)
 	if err != nil {
-		log.Errorf("Unable to connect to cluster.\n%v", err)
+		log.Errorf("Unable to connect to cluster: %v.\n%v", clusterAddr, err)
 	}
 	return clusterAdmin
 }
@@ -48,12 +46,12 @@ func describeTopicConfig(topicName string, clusterAdmin sarama.ClusterAdmin, wg 
 	}
 	RegisterMetrics(r, topicName, collector)
 	//log.Debug(r)
-	for _, v := range r {
-		if s, err := strconv.Atoi(v.Value); err == nil {
-			// Register metrics
-			collector.minCompactionLagMs.With(prometheus.Labels{"topic": topicName}).Set(float64(s))
-		}
-	}
+	// for _, v := range r {
+	// 	if s, err := strconv.Atoi(v.Value); err == nil {
+	// 		// Register metrics
+	// 		collector.minCompactionLagMs.With(prometheus.Labels{"topic": topicName}).Set(float64(s))
+	// 	}
+	// }
 	return
 }
 
