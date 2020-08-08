@@ -13,7 +13,7 @@ var (
 // TomlConfig is the main config struct
 type TomlConfig struct {
 	Global struct {
-		Port int `toml:"port"`
+		Port string `toml:"port"`
 	} `toml:"global"`
 	Log struct {
 		Format string `toml:"format"`

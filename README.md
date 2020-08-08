@@ -65,7 +65,7 @@ You can still change more advanced parameters if you wish.
 
 |Stanza|Name    |Acceptable Values  |Description|Default|
 |:--   |:--	    |:--	|:--	    |:--	|
-|global|port    |int  	|What port to bind  |9000  	|
+|global|port    |string  	|What port to bind.<br>Start with `:`.  |":9000"  	|
 |log   |level   |string: info, debug, trace|Set the log level|info|
 |log   |format  |string:text,json|Change log to JSON to collect using Splunk or Logstash|text|
 |kafka|min_kafka_version|string:<KAFKA_VERSION>|Minimum Kafka version to use on [Sarama](https://github.com/Shopify/sarama) Go client.<br>The minimum supported client is the default.|0.11.0.0
