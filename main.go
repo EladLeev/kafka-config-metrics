@@ -19,5 +19,5 @@ func main() {
 
 	// Exspose Prometheus endpoint
 	http.Handle("/metrics", promhttp.Handler())
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(util.Configuration.Global.Port, nil))
 }
