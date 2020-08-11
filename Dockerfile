@@ -9,5 +9,5 @@ RUN mkdir /opt/kcm
 COPY kcm.toml /opt/kcm/kcm.toml
 LABEL maintainer="eladleev@gmail.com"
 
-EXPOSE 8080
+EXPOSE 9899
 CMD ["/usr/bin/kcm-exporter"]

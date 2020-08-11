@@ -52,7 +52,7 @@ docker build . -t kcm-exporter
 ```
 3. Run it with your custom configuration file
 ```
-docker run -p 9090:9090 -v ~/my_kcm.toml:/opt/kcm/kcm.toml kcm-exporter:latest
+docker run -p 9899:9899 -v ~/my_kcm.toml:/opt/kcm/kcm.toml kcm-exporter:latest
 ```
 
 ## Configuration
@@ -65,7 +65,7 @@ You can still change more advanced parameters if you wish.
 
 |Stanza|Name    |Acceptable Values  |Description|Default|
 |:--   |:--	    |:--	|:--	    |:--	|
-|global|port    |string  	|What port to bind.<br>Start with `:`.  |":9000"  	|
+|global|port    |string  	|What port to bind.<br>Start with `:`.  |":9899"  	|
 |log   |level   |string: info, debug, trace|Set the log level|info|
 |log   |format  |string:text,json|Change log to JSON to collect using Splunk or Logstash|text|
 |kafka|min_kafka_version|string:<KAFKA_VERSION>|Minimum Kafka version to use on [Sarama](https://github.com/Shopify/sarama) Go client.<br>The minimum supported client is the default.|0.11.0.0
@@ -98,7 +98,7 @@ Setting a higher `scrape_interval`, let's say to 10 minuts, will lead to lower r
   - job_name: 'kcm'
     scrape_interval: 600s
     static_configs:
-    - targets: ['kcm-prod:8080']
+    - targets: ['kcm-prod:9899']
 ```
 
 ## Dashboard Example
