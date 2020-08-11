@@ -48,7 +48,7 @@ func initConfig() TomlConfig {
 		config.Kafka.AdminTimeout = 5
 	}
 	if config.Global.Port == "" {
-		config.Global.Port = ":9090"
+		config.Global.Port = ":9899"
 	}
 	return config
 }

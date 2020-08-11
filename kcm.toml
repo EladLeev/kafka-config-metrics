@@ -1,7 +1,7 @@
 # Sample Config File
 
 [global]
-port = ":8080"
+port = ":9899"
 
 [log]
 level = "info"
