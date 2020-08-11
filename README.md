@@ -1,5 +1,3 @@
-## This project is still WIP. 
-
 # Kafka Configs Metrics Exporter
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/EladLeev/kafka-config-metrics/Test?style=flat-square)
 
