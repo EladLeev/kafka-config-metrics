@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/EladLeev/kafka-config-metrics/util"
@@ -17,7 +18,15 @@ func main() {
 	// Init Prometheus metrics
 	util.InitProm()
 
-	// Exspose Prometheus endpoint
+	// Exspose Prometheus endpoints
 	http.Handle("/metrics", promhttp.Handler())
+	http.HandleFunc("/-/healthy", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "OK")
+	})
+	http.HandleFunc("/-/ready", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "OK")
+	})
 	log.Fatal(http.ListenAndServe(util.Configuration.Global.Port, nil))
 }

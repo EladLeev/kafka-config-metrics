@@ -99,6 +99,13 @@ Setting a higher `scrape_interval`, let's say to 10 minuts, will lead to lower r
     - targets: ['kcm-prod:9899']
 ```
 
+### Endpoints
+`/metrics` - Metrics endpoint
+
+`/-/healthy` - This endpoint returns 200 and should be used to check the exporter health.
+
+`/-/ready`- This endpoint returns 200 when the exporter is ready to serve traffic.
+
 ## Dashboard Example
 ![Dashboard Sample](doc/dashboard.png)
 
