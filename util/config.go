@@ -1,6 +1,8 @@
 package util
 
 import (
+	"flag"
+
 	"github.com/BurntSushi/toml"
 	log "github.com/sirupsen/logrus"
 )
@@ -39,8 +41,13 @@ func init() {
 // initConfig load the config from path, parse it and return TomlConfig
 func initConfig() TomlConfig {
 	log.Debug("Config init")
+	// Parse the user input for a configuration file
+	configPath := flag.String("config", "/opt/kcm/kcm.toml", "Absolute path to the configuration file")
+	flag.Parse()
+	log.Infof("Starting from config file:%v", *configPath)
+
 	var config TomlConfig
-	if _, err := toml.DecodeFile("/opt/kcm/kcm.toml", &config); err != nil {
+	if _, err := toml.DecodeFile(*configPath, &config); err != nil {
 		log.Panicf("Unble to load config file.\n%v", err)
 	}
 	// Set custom defaults
