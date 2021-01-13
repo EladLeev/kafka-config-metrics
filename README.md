@@ -12,6 +12,8 @@ A good example might be `log.retention.ms` parameter per topic, which can be int
 
 Therefore, I decided to create a Prometheus exporter to collect those metrics.
 
+Read more on [Confluent Blog](https://www.confluent.io/blog/kafka-lag-monitoring-and-metrics-at-appsflyer/)
+
 ## Build from source
 
 ### Prerequisites
