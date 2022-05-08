@@ -37,7 +37,7 @@ jobs:
   release:
     needs: [gosec, test]
     runs-on: ubuntu-latest
-    #if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: "Build:checkout"
         uses: actions/checkout@v2
