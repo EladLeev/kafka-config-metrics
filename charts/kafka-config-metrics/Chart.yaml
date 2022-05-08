@@ -1,0 +1,6 @@
+apiVersion: v2
+name: kafka-config-metrics
+description: Kafka Configs Metrics Exporter for Prometheus
+version: 1.0.0
+maintainers:
+- name: Elad Leev
