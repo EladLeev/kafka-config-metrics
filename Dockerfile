@@ -1,6 +1,7 @@
 FROM golang:alpine AS builder
 ADD . /kafka-config-metrics
 WORKDIR /kafka-config-metrics
+RUN apk add git
 RUN go build -o kcm-exporter . && cp kcm-exporter /kcm-exporter
 
 FROM golang:alpine
