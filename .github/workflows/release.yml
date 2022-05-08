@@ -42,7 +42,7 @@ jobs:
   release:
     needs: [gosec, test]
     runs-on: ubuntu-latest
-    #if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: "Build:checkout"
         uses: actions/checkout@v2
@@ -52,7 +52,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v2
         with:
