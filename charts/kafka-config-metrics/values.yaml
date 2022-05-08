@@ -1,0 +1,50 @@
+kcmConfig:
+  log_level: info
+  default_refresh_rate: 60
+  min_kafka_version: "0.11.0.0"
+  admin_timeout: 30
+  clusters:
+    prod:
+      brokers: "kafka01-prod"
+      topicfilter: ""
+    test:
+      brokers: "kafka01-test"
+      topicfilter: "^(qa-|test-).*$"
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/eladleev/kafka-config-metrics
+  pullPolicy: IfNotPresent
+  tag: "master"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 9899
+
+
+resources: {}
+
+autoscaling:
+  enabled: false
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -14,6 +14,22 @@ Therefore, I decided to create a Prometheus exporter to collect those metrics.
 
 Read more on [Confluent Blog](https://www.confluent.io/blog/kafka-lag-monitoring-and-metrics-at-appsflyer/)
 
+Table of Contents
+-----------------
+
+-	[Build From Source](#build-from-source)
+	-	[Prerequisites](#prerequisites)
+	-	[Building Steps](#building-steps)
+-	[Using Docker Image](#using-docker-image)
+-	[Helm Chart](#helm)
+-	[Configuration](#configuration)
+	-	[Clusters](#clusters)
+	-	[Prometheus Configuration](#prometheus-configuration)
+	-	[Endpoints](#endpoints)
+-	[Dashboard Example](#dashboard-example)
+-	[Contributing](#contributing)
+-	[License](#license)
+
 ## Build from source
 
 ### Prerequisites
@@ -55,6 +71,9 @@ docker build . -t kcm-exporter
 ```
 docker run -p 9899:9899 -v ~/my_kcm.toml:/opt/kcm/kcm.toml kcm-exporter:latest
 ```
+
+## Helm
+Helm chart is available under the `/charts` dir.
 
 ## Configuration
 This project tried to stand in the Prometheus community [best practices](https://prometheus.io/docs/instrumenting/writing_exporters/) -<br>

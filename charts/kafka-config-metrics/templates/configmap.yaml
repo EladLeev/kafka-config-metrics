@@ -1,0 +1,8 @@
+kind: ConfigMap
+metadata:
+  name: kcm-config-file
+  namespace: {{ .Release.Namespace }}
+apiVersion: v1
+data:
+  customconfig.toml:
+    {{ include "config/customconfig.toml.tpl" . | quote}}
