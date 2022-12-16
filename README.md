@@ -17,18 +17,21 @@ Read more on [Confluent Blog](https://www.confluent.io/blog/kafka-lag-monitoring
 Table of Contents
 -----------------
 
--	[Build From Source](#build-from-source)
-	-	[Prerequisites](#prerequisites)
-	-	[Building Steps](#building-steps)
--	[Using Docker Image](#using-docker-image)
--	[Helm Chart](#helm)
--	[Configuration](#configuration)
-	-	[Clusters](#clusters)
-	-	[Prometheus Configuration](#prometheus-configuration)
-	-	[Endpoints](#endpoints)
--	[Dashboard Example](#dashboard-example)
--	[Contributing](#contributing)
--	[License](#license)
+- [Kafka Configs Metrics Exporter](#kafka-configs-metrics-exporter)
+  - [Motivation](#motivation)
+  - [Table of Contents](#table-of-contents)
+  - [Build from source](#build-from-source)
+    - [Prerequisites](#prerequisites)
+    - [Building Steps](#building-steps)
+  - [Using Docker Image](#using-docker-image)
+  - [Helm](#helm)
+  - [Configuration](#configuration)
+    - [Clusters](#clusters)
+    - [Prometheus Configuration](#prometheus-configuration)
+    - [Endpoints](#endpoints)
+  - [Dashboard Example](#dashboard-example)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Build from source
 
@@ -83,9 +86,10 @@ In fact, you don't really need to change anything beyond the `clusters` struct.
 
 You can still change more advanced parameters if you wish.
 
-|Stanza|Name    |Acceptable Values  |Description|Default|
-|:--   |:--	    |:--	|:--	    |:--	|
+| Stanza | Name | Acceptable Values | Description | Default |
+| :----- | :--- ||:--	|:--	    |:--	|
 |global|port    |string  	|What port to bind.<br>Start with `:`.  |":9899"  	|
+|global|timeout    |int  	|HTTP server timeout.  |3  	|
 |log   |level   |string: info, debug, trace|Set the log level|info|
 |log   |format  |string:text,json|Change log to JSON to collect using Splunk or Logstash|text|
 |kafka|min_kafka_version|string:<KAFKA_VERSION>|Minimum Kafka version to use on [Sarama](https://github.com/Shopify/sarama) Go client.<br>The minimum supported client is the default.|0.11.0.0

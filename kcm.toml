@@ -2,6 +2,7 @@
 
 [global]
 port = ":9899"
+timeout = 3
 
 [log]
 level = "info"

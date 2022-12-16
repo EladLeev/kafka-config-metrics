@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/EladLeev/kafka-config-metrics/util"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -28,5 +29,11 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintf(w, "OK")
 	})
-	log.Fatal(http.ListenAndServe(util.Configuration.Global.Port, nil))
+
+	server := &http.Server{
+		Addr:              util.Configuration.Global.Port,
+		ReadHeaderTimeout: time.Duration(util.Configuration.Global.Timeout) * time.Second,
+	}
+
+	log.Fatal(server.ListenAndServe())
 }

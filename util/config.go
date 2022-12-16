@@ -15,7 +15,8 @@ var (
 // TomlConfig is the main config struct
 type TomlConfig struct {
 	Global struct {
-		Port string `toml:"port"`
+		Port    string `toml:"port"`
+		Timeout int    `toml:"timeout"`
 	} `toml:"global"`
 	Log struct {
 		Format string `toml:"format"`
@@ -56,6 +57,9 @@ func initConfig() TomlConfig {
 	}
 	if config.Global.Port == "" {
 		config.Global.Port = ":9899"
+	}
+	if config.Global.Timeout == 0 {
+		config.Global.Timeout = 3
 	}
 	return config
 }
