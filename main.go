@@ -32,7 +32,7 @@ func main() {
 
 	server := &http.Server{
 		Addr:              util.Configuration.Global.Port,
-		ReadHeaderTimeout: 3 * time.Second,
+		ReadHeaderTimeout: time.Duration(util.Configuration.Global.Timeout) * time.Second,
 	}
 
 	log.Fatal(server.ListenAndServe())
