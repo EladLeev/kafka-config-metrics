@@ -7,5 +7,5 @@ require (
 	github.com/Shopify/sarama v1.26.4
 	github.com/prometheus/client_golang v1.11.1
 	github.com/sirupsen/logrus v1.6.0
-	golang.org/x/sys v0.3.0 // indirect
+	golang.org/x/crypto v0.6.0 // indirect
 )
