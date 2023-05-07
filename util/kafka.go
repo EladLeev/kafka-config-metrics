@@ -9,7 +9,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/EladLeev/kafka-config-metrics/util/credentials"
 	"github.com/Shopify/sarama"
 	log "github.com/sirupsen/logrus"
 )
@@ -20,20 +19,6 @@ func parseKafkaVersion(kafkaVersion string) sarama.KafkaVersion {
 		log.Panicf("Unknown Kafka Version:\n%v", err)
 	}
 	return version
-}
-
-func getCertsFromVault(path string) (map[string]interface{}, error) {
-	v, err := credentials.NewVault()
-	if err != nil {
-		return nil, err
-	}
-
-	s, err := v.GetSecret(path)
-	if err != nil {
-		return nil, err
-	}
-
-	return s.Data, nil
 }
 
 // OpenConnection to one of a given broker using supplied version
