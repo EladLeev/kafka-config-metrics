@@ -31,8 +31,11 @@ type TomlConfig struct {
 }
 
 type clusters struct {
-	Brokers     []string
-	TopicFilter string
+	Brokers            []string
+	TopicFilter        string
+	ClientCertFilePath string `toml:"client_cert_file_path"`
+	ClientKeyFilePath  string `toml:"client_key_file_path"`
+	ServerCertFilePath string `toml:"server_cert_file_path"`
 }
 
 func init() {

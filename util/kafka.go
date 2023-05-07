@@ -1,11 +1,15 @@
 package util
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
+	"os"
 	"regexp"
 	"sync"
 	"time"
 
+	"github.com/EladLeev/kafka-config-metrics/util/credentials"
 	"github.com/Shopify/sarama"
 	log "github.com/sirupsen/logrus"
 )
@@ -18,9 +22,27 @@ func parseKafkaVersion(kafkaVersion string) sarama.KafkaVersion {
 	return version
 }
 
+func getCertsFromVault(path string) (map[string]interface{}, error) {
+	v, err := credentials.NewVault()
+	if err != nil {
+		return nil, err
+	}
+
+	s, err := v.GetSecret(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.Data, nil
+}
+
 // OpenConnection to one of a given broker using supplied version
-func OpenConnection(kafkaVersion string, clusterAddr []string, adminTimeout int) sarama.ClusterAdmin {
+func OpenConnection(kafkaVersion string, clusterAddr []string, adminTimeout int, clientCertPath, clientKeyPath, serverCertPath string) sarama.ClusterAdmin {
 	config := sarama.NewConfig()
+
+	tlsConfig, err := NewTLSConfig(clientCertPath, clientKeyPath, serverCertPath)
+	config.Net.TLS.Enable = true
+	config.Net.TLS.Config = tlsConfig
 	config.Version = parseKafkaVersion(kafkaVersion)
 	config.Admin.Timeout = time.Duration(adminTimeout)
 
@@ -29,6 +51,28 @@ func OpenConnection(kafkaVersion string, clusterAddr []string, adminTimeout int)
 		log.Errorf("Unable to connect to cluster: %v.\n%v", clusterAddr, err)
 	}
 	return clusterAdmin
+}
+
+func NewTLSConfig(clientCertFile, clientKeyFile, caCertFile string) (*tls.Config, error) {
+	tlsConfig := tls.Config{}
+
+	// Load client cert
+	cert, err := tls.LoadX509KeyPair(clientCertFile, clientKeyFile)
+	if err != nil {
+		return &tlsConfig, err
+	}
+	tlsConfig.Certificates = []tls.Certificate{cert}
+
+	// Load CA cert
+	caCert, err := os.ReadFile(caCertFile)
+	if err != nil {
+		return &tlsConfig, err
+	}
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
+	tlsConfig.RootCAs = caCertPool
+
+	return &tlsConfig, err
 }
 
 // describeTopicConfig Gets topicName and ClusterAdmin interface and return []ConfigEntry
@@ -77,7 +121,7 @@ func filterTopic(filterRegex string) *regexp.Regexp {
 // and then run DescribeTopicConfig to populate the metrics
 func PullConfigs(cfg TomlConfig, clusterName string, collector *Collector) {
 	clusterBrokers := cfg.Clusters[clusterName].Brokers
-	clusterAdmin := OpenConnection(cfg.Kafka.MinKafkaVersion, clusterBrokers, cfg.Kafka.AdminTimeout)
+	clusterAdmin := OpenConnection(cfg.Kafka.MinKafkaVersion, clusterBrokers, cfg.Kafka.AdminTimeout, cfg.Clusters[clusterName].ClientCertFilePath, cfg.Clusters[clusterName].ClientKeyFilePath, cfg.Clusters[clusterName].ServerCertFilePath)
 	log.Debugf("KafkaVersion: %v | BrokerList: %v", cfg.Kafka.MinKafkaVersion, clusterBrokers)
 	defer clusterAdmin.Close()
 
