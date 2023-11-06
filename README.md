@@ -8,7 +8,7 @@
 Unlike some other systems, Kafka doesn't expose its configurations as metrics. <br>
 There are few useful configuration parameters that might be beneficial to collect in order to improve the visibility and alerting over Kafka.
 
-A good example might be `log.retention.ms` parameter per topic, which can be integrated into Kafka's dashboards to extend its visibilty, or to integrate it into an alerting query to create smarter alerts or automations based on topic retention.
+A good example might be `log.retention.ms` parameter per topic, which can be integrated into Kafka's dashboards to extend its visibility, or to integrate it into an alerting query to create smarter alerts or automations based on topic retention.
 
 Therefore, I decided to create a Prometheus exporter to collect those metrics.
 
@@ -117,7 +117,7 @@ e.g - `"^(qa-|test-).*$"` - Filter all topics that are starting with `qa` or `te
 
 ### Prometheus Configuration
 When setting this exporter in the Prometheus targets, bear in mind that topic configs are not subject to change that often in most use cases.<br>
-Setting a higher `scrape_interval`, let's say to 10 minuts, will lead to lower requests rate to the Kafka cluster while still keeping the exporter functional.
+Setting a higher `scrape_interval`, let's say to 10 minutes, will lead to lower requests rate to the Kafka cluster while still keeping the exporter functional.
 ```
   - job_name: 'kcm'
     scrape_interval: 600s

@@ -4,6 +4,9 @@ metadata:
   name: {{ include "kafka-config-metrics.fullname" . }}
   labels:
     {{- include "kafka-config-metrics.labels" . | nindent 4 }}
+    {{- $commonLabels := .Values.commonLabels -}}
+    {{- $serviceLabels := default .Values.service.labels dict -}}
+    {{- toYaml (merge $commonLabels $serviceLabels) | nindent 4 | trimSuffix "\n" }}
 spec:
   type: {{ .Values.service.type }}
   ports:
