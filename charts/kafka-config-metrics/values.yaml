@@ -22,12 +22,20 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# common labels will be set for both pods, service and deployment. Duplicate labels will be merged
+commonLabels: {}
+
 serviceAccount:
   create: true
   annotations: {}
   name: ""
+  labels: {}
+
+deploymentLabels: {}
 
 podAnnotations: {}
+
+podLabels: {}
 
 podSecurityContext: {}
 
@@ -36,7 +44,7 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 9899
-
+  labels: {}
 
 resources: {}
 
