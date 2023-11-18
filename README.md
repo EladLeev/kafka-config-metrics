@@ -1,6 +1,7 @@
 # Kafka Configs Metrics Exporter
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/EladLeev/kafka-config-metrics/release.yml?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/EladLeev/kafka-config-metrics)](https://goreportcard.com/report/github.com/EladLeev/kafka-config-metrics)
+[![Renovate](https://img.shields.io/badge/renovate-enabled-%231A1F6C?logo=renovatebot)](https://renovatebot.com)
 
 "Kafka Configs Metrics Exporter" for Prometheus allows you to export some of the Kafka configuration as metrics.
 
