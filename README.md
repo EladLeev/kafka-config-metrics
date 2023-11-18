@@ -38,7 +38,7 @@ Table of Contents
 
 ### Prerequisites
 
-* Install Go version 1.12+
+* Install Go version 1.19+
 
 ### Building Steps
 
@@ -93,7 +93,7 @@ You can still change more advanced parameters if you wish.
 |global|timeout    |int  	|HTTP server timeout.  |3  	|
 |log   |level   |string: info, debug, trace|Set the log level|info|
 |log   |format  |string:text,json|Change log to JSON to collect using Splunk or Logstash|text|
-|kafka|min_kafka_version|string:<KAFKA_VERSION>|Minimum Kafka version to use on [Sarama](https://github.com/Shopify/sarama) Go client.<br>The minimum supported client is the default.|0.11.0.0
+|kafka|min_kafka_version|string:<KAFKA_VERSION>|Minimum Kafka version to use on [Sarama](https://github.com/IBM/sarama) Go client.<br>The minimum supported client is the default.|0.11.0.0
 |kafka|admin_timeout|int|The maximum duration the administrative Kafka client will wait for ClusterAdmin operations.|5 sec
 
 ### Clusters
