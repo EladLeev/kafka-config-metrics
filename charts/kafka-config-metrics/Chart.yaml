@@ -1,8 +1,13 @@
 apiVersion: v2
 name: kafka-config-metrics
 description: Kafka Configs Metrics Exporter for Prometheus
-version: 1.0.1
+version: 1.0.2
 appVersion: v2.1.0
 maintainers:
 - name: Elad Leev
   url: https://leevs.dev/
+keywords:
+  - kafka
+  - prometheus
+  - kafka-config
+  - observability
