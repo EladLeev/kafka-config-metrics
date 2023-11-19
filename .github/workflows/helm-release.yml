@@ -16,6 +16,7 @@ jobs:
           CHART_VALUES: ./charts/kafka-config-metrics/values.yaml
   release:
     needs: helm-check
+    if: github.ref == 'refs/heads/master'
     permissions:
       contents: write
     runs-on: ubuntu-latest
