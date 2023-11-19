@@ -3,13 +3,13 @@ kcmConfig:
   default_refresh_rate: 60
   min_kafka_version: "0.11.0.0"
   admin_timeout: 30
-  clusters:
-    prod:
-      brokers: "kafka01-prod"
-      topicfilter: ""
-    test:
-      brokers: "kafka01-test"
-      topicfilter: "^(qa-|test-).*$"
+  clusters: {}
+#    prod:
+#      brokers: "kafka01-prod"
+#      topicfilter: ""
+#    test:
+#      brokers: "kafka01-test"
+#      topicfilter: "^(qa-|test-).*$"
 
 replicaCount: 1
 

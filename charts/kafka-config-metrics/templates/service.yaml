@@ -1,12 +1,14 @@
+{{- $commonLabels := .Values.commonLabels -}}
+{{- $serviceLabels := default .Values.service.labels dict -}}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "kafka-config-metrics.fullname" . }}
   labels:
     {{- include "kafka-config-metrics.labels" . | nindent 4 }}
-    {{- $commonLabels := .Values.commonLabels -}}
-    {{- $serviceLabels := default .Values.service.labels dict -}}
+    {{- if or $commonLabels $serviceLabels }}
     {{- toYaml (merge $commonLabels $serviceLabels) | nindent 4 | trimSuffix "\n" }}
+    {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
