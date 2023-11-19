@@ -5,4 +5,4 @@ metadata:
 apiVersion: v1
 data:
   customconfig.toml:
-    {{ include "config/customconfig.toml.tpl" . | quote}}
+     include "config/customconfig.toml.tpl" . | quote}}
