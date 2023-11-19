@@ -18,7 +18,7 @@ jobs:
       GO111MODULE: on
     steps:
       - name: Checkout Source 
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Run Gosec Security Scanner
         uses: securego/gosec@master
         with:
@@ -35,6 +35,7 @@ jobs:
       uses: actions/setup-go@v4
       with:
         go-version: ${{ matrix.go-version }}
+        cache: false
     - name: Checkout code
       uses: actions/checkout@v4
     - name: Test
