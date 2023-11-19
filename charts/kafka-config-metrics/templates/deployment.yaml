@@ -1,12 +1,15 @@
 {{- $commonLabels := .Values.commonLabels -}}
+{{- $deploymentLabels := default .Values.deploymentLabels dict -}}
+{{- $podLabels := default .Values.podLabels dict -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "kafka-config-metrics.fullname" . }}
   labels:
     {{- include "kafka-config-metrics.labels" . | nindent 4 }}
-    {{- $deploymentLabels := default .Values.deploymentLabels dict -}}
+    {{- if or $commonLabels $deploymentLabels }}
     {{- toYaml (merge $commonLabels $deploymentLabels) | nindent 4 | trimSuffix "\n" }}
+    {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -22,8 +25,9 @@ spec:
       {{- end }}
       labels:
         {{- include "kafka-config-metrics.selectorLabels" . | nindent 8 }}
-        {{- $podLabels := default .Values.podLabels dict -}}
+        {{- if or $commonLabels $podLabels }}
         {{- toYaml (merge $commonLabels $podLabels) | nindent 8 | trimSuffix "\n" }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
