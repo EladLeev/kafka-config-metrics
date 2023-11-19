@@ -42,7 +42,8 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: ["--config /opt/kcm/config"]
+          command: [ "/usr/bin/kcm-exporter" ]
+          args: [ "--config", "/opt/kcm/config/customconfig.toml" ]
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
