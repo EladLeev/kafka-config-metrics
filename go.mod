@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/BurntSushi/toml v1.3.2
-	github.com/EladLeev/kafka-config-metrics v0.0.0-20231118104641-2d6c460a6c90
+	github.com/EladLeev/kafka-config-metrics 7958f98ce448
 	github.com/IBM/sarama v1.42.1
 	github.com/prometheus/client_golang v1.17.0
 	github.com/sirupsen/logrus v1.9.3
