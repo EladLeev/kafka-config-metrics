@@ -3,6 +3,18 @@ entries:
   kafka-config-metrics:
   - apiVersion: v2
     appVersion: v2.1.0
+    created: "2023-11-19T17:20:29.431092235Z"
+    description: Kafka Configs Metrics Exporter for Prometheus
+    digest: 65bdb67bb4e4025ddb44f5079d19b69d7bc9de77c2d826ecb75a3e5a0d69dcd5
+    maintainers:
+    - name: Elad Leev
+      url: https://leevs.dev/
+    name: kafka-config-metrics
+    urls:
+    - https://github.com/EladLeev/kafka-config-metrics/releases/download/kafka-config-metrics-1.0.1/kafka-config-metrics-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
+    appVersion: v2.1.0
     created: "2023-11-19T17:02:48.995999505Z"
     description: Kafka Configs Metrics Exporter for Prometheus
     digest: af3295589d2e441cc59104773ed43f1bea3d854de57149620c8ee3a2f53f605e
@@ -13,4 +25,4 @@ entries:
     urls:
     - https://github.com/EladLeev/kafka-config-metrics/releases/download/kafka-config-metrics-1.0.0/kafka-config-metrics-1.0.0.tgz
     version: 1.0.0
-generated: "2023-11-19T17:02:48.996012278Z"
+generated: "2023-11-19T17:20:29.43110562Z"
