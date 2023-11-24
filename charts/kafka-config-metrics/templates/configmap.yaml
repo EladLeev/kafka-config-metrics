@@ -1,6 +1,6 @@
 kind: ConfigMap
 metadata:
-  name: {{ include "kafka-config-metrics.fullname" . }}-config
+  name: {{ include "kafka-config-metrics.fullname" . }}-cm
   namespace: {{ .Release.Namespace }}
 apiVersion: v1
 data:

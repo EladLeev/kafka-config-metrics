@@ -65,7 +65,7 @@ spec:
       volumes:
       - name: configmap
         configMap:
-          name: kcm-config-file
+          name: {{ include "kafka-config-metrics.fullname" . }}-cm
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
