@@ -1,6 +1,6 @@
 kind: ConfigMap
 metadata:
-  name: kcm-config-file
+  name: {{ include "kafka-config-metrics.fullname" . }}-config
   namespace: {{ .Release.Namespace }}
 apiVersion: v1
 data:
