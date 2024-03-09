@@ -38,7 +38,7 @@ Table of Contents
 
 ### Prerequisites
 
-* Install Go version 1.19+
+* Install Go version 1.20+
 
 ### Building Steps
 
