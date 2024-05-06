@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: helm-check
-        uses: igabaydulin/helm-check-action@0.2.0
+        uses: igabaydulin/helm-check-action@0.2.1
         env:
           CHART_LOCATION: ./charts/kafka-config-metrics
           CHART_VALUES: ./charts/kafka-config-metrics/values.yaml
