@@ -3,7 +3,7 @@ module github.com/EladLeev/kafka-config-metrics
 go 1.20
 
 require (
-	github.com/BurntSushi/toml v1.3.2
+	github.com/BurntSushi/toml v1.4.0
 	github.com/IBM/sarama v1.43.2
 	github.com/prometheus/client_golang v1.19.1
 	github.com/sirupsen/logrus v1.9.3
