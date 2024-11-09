@@ -2,7 +2,7 @@
 replicaCount: 1
 
 image:
-  repository: eladleev/kafka-config-metrics
+  repository: ghcr.io/eladleev/kafka-config-metrics
   pullPolicy: IfNotPresent
   tag: ""
 
