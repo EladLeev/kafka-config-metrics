@@ -1,8 +1,9 @@
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "kafka-config-metrics.fullname" . }}-cm
-  namespace: {{ .Release.Namespace }}
-apiVersion: v1
+  labels:
+    {{- include "kafka-config-metrics.labels" . | nindent 4 }}
 data:
-  customconfig.toml:
-    {{ include "config/customconfig.toml.tpl" . | quote}}
+  kcm.yaml: |
+    {{- include "config/kcm.yaml.tpl" . | nindent 4 }}

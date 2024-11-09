@@ -1,29 +1,14 @@
-kcmConfig:
-  log_level: info
-  default_refresh_rate: 60
-  min_kafka_version: "0.11.0.0"
-  admin_timeout: 30
-  clusters: {}
-#    prod:
-#      brokers: "kafka01-prod"
-#      topicfilter: ""
-#    test:
-#      brokers: "kafka01-test"
-#      topicfilter: "^(qa-|test-).*$"
-
+# Default values for kafka-config-metrics
 replicaCount: 1
 
 image:
-  repository: ghcr.io/eladleev/kafka-config-metrics
+  repository: eladleev/kafka-config-metrics
   pullPolicy: IfNotPresent
-  tag: "master"
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
-# common labels will be set for both pods, service and deployment. Duplicate labels will be merged
-commonLabels: {}
 
 serviceAccount:
   create: true
@@ -31,28 +16,76 @@ serviceAccount:
   name: ""
   labels: {}
 
-deploymentLabels: {}
-
 podAnnotations: {}
-
 podLabels: {}
+deploymentLabels: {}
+commonLabels: {}
 
 podSecurityContext: {}
+# fsGroup: 2000
 
 securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+# runAsUser: 1000
 
 service:
   type: ClusterIP
   port: 9899
   labels: {}
 
-resources: {}
-
+# Add autoscaling configuration
 autoscaling:
   enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 nodeSelector: {}
 
 tolerations: []
 
 affinity: {}
+
+# Application specific configuration
+kcmConfig:
+  global:
+    timeout: 3
+  
+  log:
+    format: "text"
+    level: "info"
+  
+  kafka:
+    defaultRefreshRate: 60
+    minKafkaVersion: "2.8.0"
+    adminTimeout: 5
+  
+  clusters:
+    example-cluster:
+      brokers:
+        - "kafka-broker-1:9092"
+        - "kafka-broker-2:9092"
+      topicFilter: ""
+      tls:
+        enabled: false
+        # caCert: "/path/to/ca.crt"
+        # clientCert: "/path/to/client.crt"
+        # clientKey: "/path/to/client.key"
+      sasl:
+        enabled: false
+        usernameEnv: "KAFKA_USERNAME"
+        passwordEnv: "KAFKA_PASSWORD"
+        mechanism: "PLAIN"
