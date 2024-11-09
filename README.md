@@ -64,7 +64,7 @@ _Use topic filtering as needed._
 4. Deploy the binary and run the exporter
 
 ```bash
-cp ~/my_kcm.toml /opt/kcm/kcm.toml
+cp ~/my_kcm.toml /opt/kcm/kcm.yaml
 ./kcm-exporter
 ```
 
@@ -88,7 +88,7 @@ docker build . -t kcm-exporter
 3. Run it with your custom configuration file
 
 ```bash
-docker run -p 9899:9899 -v ~/my_kcm.toml:/opt/kcm/kcm.toml kcm-exporter:latest
+docker run -p 9899:9899 -v ~/my_kcm.toml:/opt/kcm/kcm.yaml kcm-exporter:latest
 ```
 
 ## Helm
