@@ -70,6 +70,7 @@ func main() {
 	defer stop()
 
 	go func() {
+		logrus.Infof(" \\ʕ ◔ ϖ ◔ ʔ/ ## Kafka-Config-Metrics Exporter ## \\ʕ ◔ ϖ ◔ ʔ/")
 		logrus.Infof("Starting server on %s", cfg.Global.Port)
 		if err := server.ListenAndServe(); err != http.ErrServerClosed {
 			logrus.Fatalf("Failed to start server: %v", err)
