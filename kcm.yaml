@@ -18,26 +18,26 @@ clusters:
   prod_cluster:
     brokers:
       - "localhost:9092"
-#    tls:
-#      enabled: true
-#      caCert: "/path/to/ca.pem"
-#      clientCert: "/path/to/client-cert.pem"
-#      clientKey: "/path/to/client-key.pem"
-#    sasl:
-#      enabled: true
-#      usernameEnv: "KAFKA_PROD_USERNAME"
-#      passwordEnv: "KAFKA_PROD_PASSWORD"
-#      mechanism: "PLAIN"
+    tls:
+      enabled: true
+      caCert: "/path/to/ca.pem"
+      clientCert: "/path/to/client-cert.pem"
+      clientKey: "/path/to/client-key.pem"
+    sasl:
+      enabled: true
+      usernameEnv: "KAFKA_PROD_USERNAME"
+      passwordEnv: "KAFKA_PROD_PASSWORD"
+      mechanism: "PLAIN"
 
-#  secure_cluster:
-#    brokers:
-#      - "kafka-secure:9093"
-#    topicFilter: "^(internal-|system-).*$"
-#    tls:
-#      enabled: true
-#      caCert: "/path/to/ca.pem"
-#    sasl:
-#      enabled: true
-#      usernameEnv: "KAFKA_SECURE_USERNAME"
-#      passwordEnv: "KAFKA_SECURE_PASSWORD"
-#      mechanism: "SCRAM-SHA-512"
+  secure_cluster:
+    brokers:
+      - "kafka-secure:9093"
+    topicFilter: "^(internal-|system-).*$"
+    tls:
+      enabled: true
+      caCert: "/path/to/ca.pem"
+    sasl:
+      enabled: true
+      usernameEnv: "KAFKA_SECURE_USERNAME"
+      passwordEnv: "KAFKA_SECURE_PASSWORD"
+      mechanism: "SCRAM-SHA-512"
