@@ -1,6 +1,6 @@
-{{- $commonLabels := .Values.commonLabels -}}
-{{- $deploymentLabels := default .Values.deploymentLabels dict -}}
-{{- $podLabels := default .Values.podLabels dict -}}
+{{- $commonLabels := .Values.commonLabels | default dict -}}
+{{- $deploymentLabels := .Values.deploymentLabels | default dict -}}
+{{- $podLabels := .Values.podLabels | default dict -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,7 +11,7 @@ metadata:
     {{- toYaml (merge $commonLabels $deploymentLabels) | nindent 4 | trimSuffix "\n" }}
     {{- end }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
+  {{- if not (hasKey .Values "autoscaling" | and .Values.autoscaling.enabled) }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
@@ -43,7 +43,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: [ "/usr/bin/kcm-exporter" ]
-          args: [ "--config", "/opt/kcm/config/customconfig.toml" ]
+          args: [ "--config", "/opt/kcm/config/kcm.yaml" ]
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
@@ -57,15 +57,15 @@ spec:
               path: /-/ready
               port: http
           volumeMounts:
-          - name: configmap
-            mountPath: /opt/kcm/config
+            - name: configmap
+              mountPath: /opt/kcm/config
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
       volumes:
-      - name: configmap
-        configMap:
-          name: {{ include "kafka-config-metrics.fullname" . }}-cm
+        - name: configmap
+          configMap:
+            name: {{ include "kafka-config-metrics.fullname" . }}-cm
+      {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}

@@ -1,0 +1,43 @@
+# Sample Config File
+global:
+  port: ":9899"
+  timeout: 3
+
+log:
+  level: "info"
+  # format: "json"
+
+kafka:
+  defaultRefreshRate: 60
+  # As the `describeConfigs` operation is supported by brokers with version 0.11.0.0 or higher:
+  # https://kafka.apache.org/23/javadoc/index.html?org/apache/kafka/clients/admin/AdminClient.html
+  minKafkaVersion: "0.11.0.0"
+  adminTimeout: 30  # default: 5
+
+clusters:
+  prod_cluster:
+    brokers:
+      - "localhost:9092"
+    tls:
+      enabled: true
+      caCert: "/path/to/ca.pem"
+      clientCert: "/path/to/client-cert.pem"
+      clientKey: "/path/to/client-key.pem"
+    sasl:
+      enabled: true
+      usernameEnv: "KAFKA_PROD_USERNAME"
+      passwordEnv: "KAFKA_PROD_PASSWORD"
+      mechanism: "PLAIN"
+
+  secure_cluster:
+    brokers:
+      - "kafka-secure:9093"
+    topicFilter: "^(internal-|system-).*$"
+    tls:
+      enabled: true
+      caCert: "/path/to/ca.pem"
+    sasl:
+      enabled: true
+      usernameEnv: "KAFKA_SECURE_USERNAME"
+      passwordEnv: "KAFKA_SECURE_PASSWORD"
+      mechanism: "SCRAM-SHA-512"

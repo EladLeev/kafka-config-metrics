@@ -60,3 +60,15 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Validate configuration
+*/}}
+{{- define "kafka-config-metrics.validateConfig" -}}
+{{- if not .Values.kcmConfig.kafka.minKafkaVersion }}
+{{- fail "kafka.minKafkaVersion is required" }}
+{{- end }}
+{{- if not .Values.kcmConfig.clusters }}
+{{- fail "At least one Kafka cluster must be configured" }}
+{{- end }}
+{{- end }}

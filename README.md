@@ -30,6 +30,7 @@ Table of Contents
   - [Helm](#helm)
   - [Configuration](#configuration)
     - [Clusters](#clusters)
+    - [Authentication](#authentication)
     - [Prometheus Configuration](#prometheus-configuration)
     - [Endpoints](#endpoints)
   - [Dashboard Example](#dashboard-example)
@@ -46,7 +47,6 @@ Table of Contents
 
 1. Clone this repository
 
-
 ```bash
 git clone https://github.com/EladLeev/kafka-config-metrics
 cd kafka-config-metrics
@@ -58,17 +58,17 @@ cd kafka-config-metrics
 go build -o kcm-exporter .
 ```
 
-3. Copy and edit the [config file](https://github.com/EladLeev/kafka-config-metrics/blob/master/kcm.toml) from this repository and point it into your Kafka clusters.  
-_Use topic filtering as needed._
+3. Copy and edit the [config file](https://github.com/EladLeev/kafka-config-metrics/blob/master/kcm.yaml) from this repository and point it into your Kafka clusters.  
+   _Use topic filtering as needed._
 
 4. Deploy the binary and run the exporter
 
 ```bash
-cp ~/my_kcm.toml /opt/kcm/kcm.toml
+cp ~/my_kcm.yaml /opt/kcm/kcm.yaml
 ./kcm-exporter
 ```
 
-The exporter will use `/opt/kcm/kcm.toml` as default.
+The exporter will use `/opt/kcm/kcm.yaml` as default.
 
 ## Using Docker Image
 
@@ -88,65 +88,84 @@ docker build . -t kcm-exporter
 3. Run it with your custom configuration file
 
 ```bash
-docker run -p 9899:9899 -v ~/my_kcm.toml:/opt/kcm/kcm.toml kcm-exporter:latest
+docker run -p 9899:9899 -v ~/my_kcm.yaml:/opt/kcm/kcm.yaml kcm-exporter:latest
 ```
 
 ## Helm
 
 Helm chart is available under the `/charts` dir.
 
+To install the chart:
+
+```bash
+helm install kafka-config-metrics ./charts/kafka-config-metrics -f values.yaml
+```
+
 ## Configuration
 
 This project tried to stand in the Prometheus community [best practices](https://prometheus.io/docs/instrumenting/writing_exporters/) -  
 "You should aim for an exporter that requires no custom configuration by the user beyond telling it where the application is".
 
-In fact, you don't really need to change anything beyond the `clusters` struct.
+In fact, you don't really need to change anything beyond the `clusters` configuration.
 
-You can still change more advanced parameters if you wish.
+Example configuration:
 
-| Stanza | Name          | Acceptable Values                  | Description                                                              | Default     |
-| ------ | ------------- | ---------------------------------- | ------------------------------------------------------------------------ | ----------- |
-| global | port          | string                             | What port to bind. Start with `:`.                                       | ":9899"     |
-| global | timeout       | int                                | HTTP server timeout.                                                     | 3           |
-| log    | level         | string: info, debug, trace         | Set the log level.                                                       | info        |
-| log    | format        | string: text, json                 | Change log to JSON to collect using Splunk or Logstash.                  | text        |
-| kafka  | min_kafka_version | string: \<KAFKA_VERSION\>       | Minimum Kafka version to use on [Sarama](https://github.com/IBM/sarama) Go client. The minimum supported client is the default. | 0.11.0.0    |
-| kafka  | admin_timeout | int                                | The maximum duration the administrative Kafka client will wait for ClusterAdmin operations. | 5 sec       |
+```yaml
+global:
+  port: ":9899"    # Which port to bind
+  timeout: 3       # HTTP server timeout in seconds
 
+log:
+  format: "text"   # Log format: text or json
+  level: "info"    # Log level: info, debug, trace
 
-### Clusters
+kafka:
+  defaultRefreshRate: 60          # Refresh rate in seconds
+  minKafkaVersion: "2.8.0"       # Minimum Kafka version
+  adminTimeout: 5                 # Admin client timeout in seconds
 
-This struct defining the clusters to pull the config from.
+clusters:
+  prod:
+    brokers:
+      - "kafka01-prod:9092"
+    topicFilter: ""              # Optional regex filter
+    tls:
+      enabled: false
+      # caCert: "/path/to/ca.crt"
+      # clientCert: "/path/to/client.crt"
+      # clientKey: "/path/to/client.key"
+    sasl:
+      enabled: false
+      usernameEnv: "KAFKA_USERNAME"
+      passwordEnv: "KAFKA_PASSWORD"
+      mechanism: "PLAIN"         # PLAIN, SCRAM-SHA-256, or SCRAM-SHA-512
 
-```bash
-[clusters]
-  
-  [clusters.prod]
-  brokers = ["kafka01-prod"]
-
-  [clusters.test]
-  brokers = ["kafka02-prod", "kafka03-prod"]
-  topicfilter="^(qa-|test-).*$"
-
-  # Template
-  [clusters.<NAME>]
-  brokers = ["<BROKER_1>", "<BROKER_2>"]
-  topicfilter="<REGEX_FILTER>"
+  test:
+    brokers:
+      - "kafka02-test:9092"
+      - "kafka03-test:9092"
+    topicFilter: "^(qa-|test-).*$"
 ```
 
-`topicfilter` allows you to filter topics based on a Regex.  
-e.g - `"^(qa-|test-).*$"` - Filter all topics that are starting with `qa` or `test`.
+### Authentication
+
+The exporter supports both TLS and SASL authentication:
+
+- TLS: Provide CA certificate and optionally client certificate/key
+- SASL: Supports PLAIN, SCRAM-SHA-256, and SCRAM-SHA-512 mechanisms
+  - Credentials are loaded from environment variables
 
 ### Prometheus Configuration
 
 When setting this exporter in the Prometheus targets, bear in mind that topic configs are not subject to change that often in most use cases.  
 Setting a higher `scrape_interval`, let's say to 10 minutes, will lead to lower requests rate to the Kafka cluster while still keeping the exporter functional.
 
-```bash
+```yaml
+scrape_configs:
   - job_name: 'kcm'
     scrape_interval: 600s
     static_configs:
-    - targets: ['kcm-prod:9899']
+      - targets: ['kcm-prod:9899']
 ```
 
 ### Endpoints

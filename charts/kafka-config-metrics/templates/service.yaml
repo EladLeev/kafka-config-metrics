@@ -1,5 +1,5 @@
-{{- $commonLabels := .Values.commonLabels -}}
-{{- $serviceLabels := default .Values.service.labels dict -}}
+{{- $commonLabels := .Values.commonLabels | default dict -}}
+{{- $serviceLabels := .Values.service.labels | default dict -}}
 apiVersion: v1
 kind: Service
 metadata:
