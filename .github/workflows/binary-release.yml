@@ -1,0 +1,51 @@
+name: Upload Binary
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, darwin, windows]
+        goarch: [amd64, arm64]
+        exclude:
+          - goos: windows
+            goarch: arm64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.x'
+          cache: true
+
+      - name: Build binary
+        id: build
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          if [[ "${{ matrix.goos }}" == "windows" ]]; then
+            BINARY_NAME=kcm_${VERSION}_${{ matrix.goos }}_${{ matrix.goarch }}.exe
+          else
+            BINARY_NAME=kcm_${VERSION}_${{ matrix.goos }}_${{ matrix.goarch }}
+          fi
+          
+          # Build the binary
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -ldflags="-X 'main.Version=$VERSION'" -o $BINARY_NAME .
+          
+          # Create checksum
+          sha256sum $BINARY_NAME > $BINARY_NAME.sha256
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            kcm_*
+          tag_name: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generate_release_notes: true
