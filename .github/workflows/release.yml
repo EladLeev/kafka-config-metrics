@@ -18,7 +18,7 @@ jobs:
       GO111MODULE: on
     steps:
       - name: Checkout Source 
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Run Gosec Security Scanner
         uses: securego/gosec@master
         with:
@@ -37,7 +37,7 @@ jobs:
         go-version: ${{ matrix.go-version }}
         cache: false
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Test
       run: go test ./...
   release:
@@ -46,7 +46,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - name: "Build:checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Log in to ghcr.io
         uses: docker/login-action@v3
         with:
