@@ -30,7 +30,7 @@ type TLSConfig struct {
 	Enabled    bool   `yaml:"enabled"`
 	CACert     string `yaml:"caCert"`
 	ClientCert string `yaml:"clientCert"`
-	ClientKey  string `yaml:"clientKey"`
+	ClientKey  string `yaml:"clientKey"` // #nosec G117 -- config struct field, not a secret value
 }
 
 type SASLConfig struct {
@@ -43,7 +43,7 @@ type SASLConfig struct {
 type RuntimeSASLConfig struct {
 	Enabled   bool
 	Username  string
-	Password  string
+	Password  string // #nosec G117 -- config struct field, not a secret value
 	Mechanism string
 }
 
@@ -58,6 +58,6 @@ type ClusterConfig struct {
 type SASLCredentials struct {
 	Enabled   bool
 	Username  string
-	Password  string
+	Password  string // #nosec G117 -- config struct field, not a secret value
 	Mechanism string
 }
