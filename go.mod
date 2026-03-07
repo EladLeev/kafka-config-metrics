@@ -2,7 +2,7 @@ module github.com/EladLeev/kafka-config-metrics
 
 go 1.25.0
 
-toolchain go1.26.0
+toolchain go1.26.1
 
 require (
 	github.com/IBM/sarama v1.47.0
