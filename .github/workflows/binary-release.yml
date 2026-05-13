@@ -42,7 +42,7 @@ jobs:
           sha256sum $BINARY_NAME > $BINARY_NAME.sha256
 
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             kcm_*
