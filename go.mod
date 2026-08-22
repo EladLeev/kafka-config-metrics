@@ -2,12 +2,12 @@ module github.com/EladLeev/kafka-config-metrics
 
 go 1.25.0
 
-toolchain go1.26.6
+toolchain go1.27.0
 
 require (
 	github.com/IBM/sarama v1.60.1
 	github.com/prometheus/client_golang v1.24.1
-	github.com/sirupsen/logrus v1.10.0
+	github.com/sirupsen/logrus v1.10.1
 	github.com/spf13/viper v1.21.0
 )
 
